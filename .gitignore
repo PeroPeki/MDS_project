@@ -218,3 +218,21 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- Sprint Quest ---
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Dependencies / local tooling
+node_modules/
+
+# Netlify local folder
+.netlify/
+
+# Env files (never commit API keys, e.g. for BOTSchool.ai)
+.env
+.env.*

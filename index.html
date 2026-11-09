@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sprint Quest: an interactive learning project about gamification in Scrum, with missions, a quiz, Planning Poker and Agile Bot.">
+  <title>Sprint Quest | Scrum Learning Project</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main" onclick="event.preventDefault(); focusMain()">Skip to content</a>
+
+  <nav aria-label="Main">
+    <div class="navinner">
+      <div class="brand"><span class="logo" aria-hidden="true">🏆</span> Sprint Quest</div>
+      <div class="links" id="navlinks"></div>
+      <span class="xp-pill" id="topxp">0 XP</span>
+      <span class="level-pill" id="toplevel">Level 1</span>
+    </div>
+  </nav>
+
+  <main class="container" id="main" tabindex="-1">
+
+    <!-- HOME -->
+    <section id="home" class="page active" aria-labelledby="home-title">
+      <div class="hero">
+        <div>
+          <span class="eyebrow">SCRUM · GAMIFICATION</span>
+          <h1 id="home-title">Gamification <em>in Scrum</em></h1>
+          <p>An interactive learning project about gamification in Scrum, with practical examples, a short quiz and a look at its limitations.</p>
+          <div class="buttonrow">
+            <button class="button" onclick="go('missions')">Get Started <span aria-hidden="true">→</span></button>
+            <button class="button secondary" onclick="go('lesson1')">How it works</button>
+          </div>
+        </div>
+        <div class="progressbox">
+          <div class="mountain" aria-hidden="true"><span>SCRUM</span><small>LEARN / PRACTICE / REVIEW</small></div>
+          <div class="card">
+            <div class="row"><strong>Your progress</strong><span id="homeX" class="stat">0 / 70 XP</span></div>
+            <div class="bar" style="margin:14px 0"><span id="homeBar" style="width:0%"></span></div>
+            <div class="row"><span id="homeLevel" class="small">Level 1 · Rookie</span><span id="homeBadges" class="small">0 of 4 badges</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <h2>Choose your learning path</h2>
+          <p class="sub">Select your role to receive a suggested route through Sprint Quest.</p>
+        </div>
+      </div>
+      <div class="roles">
+        <button class="role" data-role="Developer" aria-pressed="false" onclick="chooseRole('Developer')">
+          <span class="icon" aria-hidden="true">💻</span>
+          <span><strong>I'm a Developer <span aria-hidden="true">→</span></strong><small>Practice collaboration, estimation and daily Scrum habits.</small></span>
+        </button>
+        <button class="role" data-role="Scrum Master" aria-pressed="false" onclick="chooseRole('Scrum Master')">
+          <span class="icon" aria-hidden="true">👥</span>
+          <span><strong>I'm a Scrum Master <span aria-hidden="true">→</span></strong><small>Explore facilitation, team motivation and risks of gamification.</small></span>
+        </button>
+      </div>
+
+      <div class="section-head">
+        <h2>Learning Missions</h2>
+        <button class="button ghost" onclick="go('missions')">All missions <span aria-hidden="true">→</span></button>
+      </div>
+      <div class="missions" id="homeMissions"></div>
+    </section>
+
+    <!-- MISSIONS -->
+    <section id="missions" class="page" aria-labelledby="missions-title">
+      <div class="section-head">
+        <div>
+          <h1 id="missions-title" class="page-title">Learning Missions</h1>
+          <p class="sub">Complete four missions, earn XP and unlock badges. <span id="roleNote"></span></p>
+        </div>
+      </div>
+      <div class="side-grid">
+        <div class="missions" id="missionList"></div>
+        <div class="card tracker">
+          <strong>Your learning path</strong>
+          <div class="circle" id="ring"><div><strong id="ringNumber">0 / 4</strong><span class="small">Missions</span></div></div>
+          <div id="missionChecklist"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSION 1 -->
+    <section id="lesson1" class="page" aria-labelledby="lesson1-title">
+      <button class="back" onclick="go('missions')"><span aria-hidden="true">←</span> Back to Missions</button>
+      <span class="eyebrow">MISSION 1</span>
+      <h1 id="lesson1-title" class="page-title lesson-title">What is gamification?</h1>
+      <blockquote class="card lesson-quote">
+        <p class="quote-text">“The use of game design elements in non-game contexts”</p>
+        <cite class="small">Deterding et al. (2011)</cite>
+      </blockquote>
+      <p class="sub">Gamification does not mean playing video games at work. It means using elements like points, achievements and progress bars in everyday activities to increase engagement.</p>
+      <div class="topics">
+        <div class="topic"><span class="topic-icon" aria-hidden="true">⭐</span><strong>Points</strong><p>Instant feedback for completing activities and learning challenges.</p></div>
+        <div class="topic"><span class="topic-icon" aria-hidden="true">🏅</span><strong>Badges</strong><p>A visible sign of something achieved, such as finishing a mission.</p></div>
+        <div class="topic"><span class="topic-icon" aria-hidden="true">📊</span><strong>Leaderboards</strong><p>Rankings can motivate but may encourage unhealthy competition.</p></div>
+      </div>
+      <div class="buttonrow">
+        <button class="button" onclick="complete('intro'); go('lesson2')" id="introButton">Got it · +10 XP →</button>
+      </div>
+    </section>
+
+    <!-- MISSION 2 -->
+    <section id="lesson2" class="page" aria-labelledby="lesson2-title">
+      <button class="back" onclick="go('missions')"><span aria-hidden="true">←</span> Back to Missions</button>
+      <span class="eyebrow">MISSION 2</span>
+      <h1 id="lesson2-title" class="page-title lesson-title">Gamified practices to try in your next sprint</h1>
+      <p class="sub">Open each practice card to learn how it works. Every new card earns +5 XP.</p>
+      <div class="practice-grid" id="practices"></div>
+      <div class="buttonrow">
+        <button class="button" onclick="go('quiz')">Continue to Quiz <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <!-- MISSION 3: QUIZ -->
+    <section id="quiz" class="page" aria-labelledby="quiz-title">
+      <button class="back" onclick="go('missions')"><span aria-hidden="true">←</span> Back to Missions</button>
+      <span class="eyebrow">MISSION 3 · QUIZ</span>
+      <h1 id="quiz-title" class="page-title lesson-title">Test your knowledge</h1>
+      <p class="sub" id="quizCount">Question 1 of 3 · +10 XP per correct answer</p>
+      <div class="bar" style="margin:18px 0"><span id="quizBar" style="width:33%"></span></div>
+      <div class="card question">
+        <h2 id="questionText" class="question-text">What does gamification mean?</h2>
+        <div class="options" id="quizOptions" role="group" aria-labelledby="questionText"></div>
+        <div id="quizFeedback" aria-live="polite"></div>
+      </div>
+      <div class="buttonrow row">
+        <button class="button secondary" onclick="prevQ()"><span aria-hidden="true">←</span> Previous</button>
+        <button class="button" onclick="nextQ()" id="nextQuestion">Next question →</button>
+      </div>
+    </section>
+
+    <!-- MISSION 4 -->
+    <section id="risks" class="page" aria-labelledby="risks-title">
+      <button class="back" onclick="go('missions')"><span aria-hidden="true">←</span> Back to Missions</button>
+      <span class="eyebrow">MISSION 4</span>
+      <h1 id="risks-title" class="page-title lesson-title">When gamification backfires</h1>
+      <p class="sub">Rewards can help motivation, but badly designed incentives may hurt team collaboration.</p>
+      <div class="topics">
+        <div class="topic"><strong>Mixed results</strong><p>Research finds that gamification effects vary by context and user. Source: Hamari et al. (2014).</p></div>
+        <div class="topic"><strong>Competition over collaboration</strong><p>Individual leaderboards can pit teammates against each other instead of rewarding shared outcomes.</p></div>
+        <div class="topic"><strong>Gaming the metric</strong><p>If points reward ticket counts rather than value, teams may optimize the score instead of real outcomes.</p></div>
+      </div>
+      <div class="buttonrow">
+        <button class="button" id="riskButton" onclick="complete('risks'); go('dashboard')">I understand the risks · +10 XP →</button>
+      </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page" aria-labelledby="dashboard-title">
+      <h1 id="dashboard-title" class="page-title">Your Dashboard</h1>
+      <p class="sub">Track your progress, XP, level and achievements.</p>
+      <div class="dashboard-stats">
+        <div class="card"><span class="small"><span aria-hidden="true">🏆</span> Your level</span><div class="big-number" id="dashLevel">Level 1</div><span id="dashTitle" class="small">Rookie</span></div>
+        <div class="card"><span class="small"><span aria-hidden="true">⭐</span> Total XP</span><div class="big-number" id="dashXp">0 XP</div><div class="bar"><span id="dashBar"></span></div></div>
+        <div class="card"><span class="small"><span aria-hidden="true">✅</span> Missions completed</span><div class="big-number" id="dashMissions">0 / 4</div><span class="small">Keep going!</span></div>
+        <div class="card"><span class="small"><span aria-hidden="true">🏅</span> Badges unlocked</span><div class="big-number" id="dashBadges">0 / 4</div><span class="small">Collect all four</span></div>
+      </div>
+      <div class="dash-grid">
+        <div class="card"><h2 class="card-title">Your Badges</h2><div class="badge-grid" id="badges"></div></div>
+        <div class="card">
+          <h2 class="card-title">Learning Progress</h2>
+          <div id="dashProgress"></div>
+          <button class="button secondary" style="margin-top:15px" onclick="go('missions')">Continue learning <span aria-hidden="true">→</span></button>
+        </div>
+      </div>
+      <div class="buttonrow">
+        <button class="button ghost" onclick="resetProgress()">Reset saved progress</button>
+      </div>
+    </section>
+
+    <!-- PLANNING POKER -->
+    <section id="poker" class="page" aria-labelledby="poker-title">
+      <h1 id="poker-title" class="page-title"><span aria-hidden="true">🃏</span> Planning Poker</h1>
+      <p class="sub">Practice estimating a user story using a simplified Planning Poker exercise.</p>
+      <div class="poker-grid">
+        <div class="card">
+          <span class="tag">USER STORY</span>
+          <h2 class="card-title">Save favorite articles</h2>
+          <p class="sub">As a user, I want to save my favorite articles so that I can read them later.</p>
+          <hr class="divider">
+          <strong>How does it work?</strong>
+          <p class="sub">Choose how much effort this story might need. The exercise gives you a suggested estimate and explains the reasoning.</p>
+        </div>
+        <div class="card">
+          <h2 id="estimate-title" class="card-title">Select your estimate</h2>
+          <div class="estimate-buttons" id="estimates" role="group" aria-labelledby="estimate-title"></div>
+          <button class="button" onclick="submitEstimate()"><span aria-hidden="true">✓</span> Submit estimate</button>
+          <div id="estimateResult" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AGILE BOT -->
+    <section id="bot" class="page" aria-labelledby="bot-title">
+      <h1 id="bot-title" class="page-title"><span aria-hidden="true">🤖</span> Agile Bot</h1>
+      <p class="sub">Ask questions about Agile, Scrum, Planning Poker and gamification.</p>
+      <div class="chat-grid">
+        <aside class="card" aria-label="Suggested questions">
+          <strong>Suggested questions</strong>
+          <button onclick="ask('What is Scrum?')">What is Scrum?</button>
+          <button onclick="ask('How can I gamify a sprint?')">How can I gamify a sprint?</button>
+          <button onclick="ask('What are the risks of gamification?')">What are the risks of gamification?</button>
+          <button onclick="ask('Explain Planning Poker')">Explain Planning Poker</button>
+          <p class="small" style="margin-top:25px">Prototype bot: predefined answers, no API or backend required.</p>
+        </aside>
+        <div class="card chat">
+          <div class="messages" id="messages" role="log" aria-live="polite" aria-label="Chat messages">
+            <div class="bubble bot">Hi! I'm Agile Bot. Ask me anything about Agile, Scrum or gamification.</div>
+          </div>
+          <form class="chat-entry" onsubmit="event.preventDefault(); sendChat()">
+            <label for="chatInput" class="sr-only">Your question</label>
+            <input id="chatInput" placeholder="Ask a question about Agile or Scrum…" autocomplete="off">
+            <button type="submit" class="button">Send <span aria-hidden="true">→</span></button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <footer class="footer">Sprint Quest · Agile Methodologies · University project · Progress saved locally</footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
