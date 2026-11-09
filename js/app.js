@@ -69,6 +69,10 @@ const badgesInfo = [
 
 const ESTIMATES = [1, 2, 3, 5, 8, 13, 21, '?'];
 
+// One icon per badge (symbols live in the SVG sprite at the top of index.html)
+const BADGE_ICONS = ['flag', 'compass', 'cap', 'bulb'];
+const icon = (name) => `<svg class="icon-svg" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+
 /* ---------- State (saved in localStorage) ---------- */
 
 const emptyState = () => ({ role: null, done: {}, opened: [], correct: [] });
@@ -178,7 +182,7 @@ function complete(key) {
   if (!state.done[key]) {
     state.done[key] = true;
     save();
-    notify('+10 XP earned! ⭐');
+    notify('+10 XP, nice!');
   }
   render();
 }
@@ -195,7 +199,7 @@ function openPractice(i) {
   if (!state.opened.includes(i)) {
     state.opened.push(i);
     save();
-    notify('+5 XP · Practice explored!');
+    notify('+5 XP');
   }
   render();
 }
@@ -224,7 +228,7 @@ function render() {
   const badgeCount = bc.filter(Boolean).length;
 
   // Top bar
-  $('topxp').innerHTML = `<span aria-hidden="true">⭐</span> ${total} XP`;
+  $('topxp').innerHTML = `${icon('star')} ${total} XP`;
   $('toplevel').textContent = 'Level ' + level();
 
   // Home
@@ -239,36 +243,54 @@ function render() {
 
   // Mission lists (home + missions page)
   // h3 on Home (under an h2), h2 on the Missions page (under the h1)
+  // only the next unfinished mission gets the filled button, the rest stay quiet
+  const nextIdx = cm.indexOf(false);
   const missionHtml = (hTag) => missionData
-    .map(
-      (m, i) => `
-      <div class="mission ${cm[i] ? 'done' : ''}">
-        <span class="number" aria-hidden="true">${cm[i] ? '✓' : i + 1}</span>
-        <div class="desc">
-          <${hTag}>${m[0]}</${hTag}>
-          <p>${m[1]}</p>
+    .map((m, i) => {
+      const verb = cm[i] ? 'Review' : i === nextIdx ? 'Start' : 'Open';
+      return `
+      <div class="mission c${i} ${cm[i] ? 'done' : ''}">
+        <div class="mission-top">
+          <span class="number">#${i + 1}</span>
+          <span class="reward">${icon('star')} ${m[3]} XP</span>
         </div>
-        <span class="reward"><span aria-hidden="true">⭐</span> ${m[3]} XP</span>
-        <button class="button ${cm[i] ? 'secondary' : ''}" onclick="go('${m[2]}')"
-          aria-label="${cm[i] ? 'Review' : 'Open'} mission ${i + 1}: ${m[0]}${cm[i] ? ' (completed)' : ''}">
-          ${cm[i] ? 'Review' : 'Open'} <span aria-hidden="true">→</span>
+        <${hTag}>${m[0]}</${hTag}>
+        <p>${m[1]}</p>
+        <button class="button ${i === nextIdx ? '' : 'secondary'}" onclick="go('${m[2]}')"
+          aria-label="${verb} mission ${i + 1}: ${m[0]}${cm[i] ? ' (completed)' : ''}">
+          ${verb} <span class="arrow" aria-hidden="true">→</span>
         </button>
-      </div>`
-    )
+        ${cm[i] ? '<span class="stamp" aria-hidden="true">done!</span>' : ''}
+      </div>`;
+    })
     .join('');
   $('missionList').innerHTML = missionHtml('h2');
   $('homeMissions').innerHTML = missionHtml('h3');
+
+  // Sprint board in the hero: done missions in Done, the next one in Doing
+  const short = ['What is gamification?', 'Sprint practices', 'Quiz', 'When it backfires'];
+  const cols = { todo: [], doing: [], done: [] };
+  cm.forEach((d, i) => {
+    const col = d ? 'done' : i === nextIdx ? 'doing' : 'todo';
+    cols[col].push(`<div class="mini c${i} ${d ? 'done' : ''}">${short[i]}</div>`);
+  });
+  $('colTodo').innerHTML = cols.todo.join('');
+  $('colDoing').innerHTML = cols.doing.join('');
+  $('colDone').innerHTML = cols.done.join('');
+  $('nTodo').textContent = cols.todo.length;
+  $('nDoing').textContent = cols.doing.length;
+  $('nDone').textContent = cols.done.length;
 
   // Tracker ring
   $('ring').style.setProperty('--angle', (doneCount / 4) * 360 + 'deg');
   $('ringNumber').textContent = `${doneCount} / 4`;
   $('missionChecklist').innerHTML = cm
-    .map((d, i) => `<p class="small"><span aria-hidden="true">${d ? '✅' : '◯'}</span> Mission ${i + 1} ${d ? '· Complete' : '· Not started'}</p>`)
+    .map((d, i) => `<p class="small checklist-item ${d ? 'done' : ''}"><span class="dot" aria-hidden="true">${d ? icon('check') : ''}</span> Mission ${i + 1}: ${d ? 'complete' : 'not started'}</p>`)
     .join('');
 
   // Lesson buttons
-  $('introButton').textContent = state.done.intro ? 'Completed ✓ · Next →' : 'Got it · +10 XP →';
-  $('riskButton').textContent = state.done.risks ? 'Completed ✓ · Dashboard →' : 'I understand the risks · +10 XP →';
+  $('introButton').textContent = state.done.intro ? 'Completed · Next mission →' : 'Got it, +10 XP →';
+  $('riskButton').textContent = state.done.risks ? 'Completed · Go to dashboard →' : 'I understand the risks, +10 XP →';
 
   // Practice cards (only phrasing content inside <button> – <p> is not allowed there)
   $('practices').innerHTML = practiceData
@@ -279,7 +301,7 @@ function render() {
         <span class="tag">${p[1]}</span>
         <span class="title">${p[0]}</span>
         <span class="text">${p[2]}</span>
-        <span class="cta">${opened ? '✓ Explored · +5 XP' : 'Open card · +5 XP →'}</span>
+        <span class="cta">${opened ? 'Explored · +5 XP' : 'Open card, +5 XP →'}</span>
       </button>`;
     })
     .join('');
@@ -295,10 +317,10 @@ function render() {
     .map(
       (b, i) => `
       <div class="badge ${bc[i] ? '' : 'locked'}">
-        <span class="symbol" aria-hidden="true">🏅</span>
+        <span class="symbol">${icon(bc[i] ? BADGE_ICONS[i] : 'lock')}</span>
         <strong>${b[0]}</strong>
         <p>${b[1]}</p>
-        <span class="small">${bc[i] ? '✓ Unlocked' : '<span aria-hidden="true">🔒</span> Locked'}</span>
+        <span class="small">${bc[i] ? 'Unlocked' : 'Locked'}</span>
       </div>`
     )
     .join('');
@@ -337,7 +359,7 @@ function renderQuiz() {
       return `<button class="option ${isCorrect ? 'correct' : ''}" onclick="answer(${i})"><span class="mark">${isCorrect ? '✓ ' : ''}</span>${a}</button>`;
     })
     .join('');
-  $('quizFeedback').innerHTML = answered ? `<div class="feedback">✓ Correct! ${q.why}</div>` : '';
+  $('quizFeedback').innerHTML = answered ? `<div class="feedback"><strong>Correct.</strong> ${q.why}</div>` : '';
   $('nextQuestion').textContent = question === 2 ? 'Finish quiz →' : 'Next question →';
 }
 
@@ -347,10 +369,10 @@ function answer(i) {
   if (i === q.correct) {
     state.correct.push(question);
     save();
-    notify('Correct! +10 XP ⭐');
+    notify('Correct! +10 XP');
     render();
   } else {
-    $('quizFeedback').innerHTML = '<div class="feedback bad">✗ Not quite. Try again!</div>';
+    $('quizFeedback').innerHTML = '<div class="feedback bad"><strong>Not quite.</strong> Have another look and try again.</div>';
     // mark the wrong choice with a symbol too, not only with colour
     document.querySelectorAll('#quizOptions .option').forEach((btn, j) => {
       btn.classList.toggle('wrong', i === j);
