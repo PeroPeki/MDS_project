@@ -6,25 +6,32 @@ Users complete four learning missions, earn XP, unlock badges, practise **Planni
 
 ## Project structure
 
+Built with **React + Vite**.
+
 ```
-sprint-quest/
-├── index.html          # all pages (Home, Missions, Lessons, Quiz, Dashboard, Poker, Bot)
-├── css/styles.css      # all styles + responsive breakpoints (850px, 530px)
-├── js/app.js           # state, routing, rendering, quiz, poker, chatbot
-├── netlify.toml        # Netlify deploy config
+MDS_project/
+├── index.html               # Vite entry (fonts, favicon, #root)
+├── src/
+│   ├── main.jsx             # mounts <App />
+│   ├── App.jsx              # hash routing, toast, actions, page switch
+│   ├── data.js              # all content: missions, practices, quiz, badges, bot answers
+│   ├── progress.js          # saved progress (localStorage) + derived XP, level, badges
+│   ├── styles.css           # all styles + responsive breakpoints (1000px, 850px, 530px)
+│   ├── components/          # Nav, Icon, MissionList, LessonHeader
+│   └── pages/               # Home, Missions, Lesson1, Lesson2, Quiz, Risks, Dashboard, Poker, Bot
+├── netlify.toml             # build: npm run build, publish: dist
 └── .github/pull_request_template.md   # Definition of Done checklist for every PR
 ```
 
-No build step, no dependencies: it is plain HTML, CSS and JavaScript.
-
 ## Run locally
 
-Open `index.html` in a browser, or (recommended, closer to Netlify):
+Needs Node 20+.
 
 ```bash
-npx serve .
-# or
-python3 -m http.server 8000
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # production build into dist/
+npm run preview    # serve the build locally
 ```
 
 Pages are addressed with the URL hash, e.g. `/#missions`, `/#quiz`, `/#poker`, `/#bot`.
@@ -34,8 +41,8 @@ Progress is stored in the browser's `localStorage` (key `sprintquest-progress-v1
 
 1. **Never commit directly to `main`.** `main` is what Netlify deploys.
 2. Pick a story from the board and create a branch named after it:
-   `feature/<short-name>` or `fix/<short-name>` (e.g. `fix/mobile-nav`, `feature/botschool-chat`).
-3. Commit small, with clear messages: `Fix mobile nav overflow`, `Add quiz retry limit`.
+   `SCRUM-<key>-<short-name>` (e.g. `SCRUM-10-vite-setup`, `SCRUM-23-botschool-chat`).
+3. Commit small, with the Jira key first: `SCRUM-11 Fix mobile nav overflow`.
 4. Open a **Pull Request** into `main`. The PR template contains the Definition of Done checklist.
 5. At least **one teammate reviews** the PR and checks the Netlify deploy preview.
 6. Merge, then move the card to *Done* on the board.
@@ -44,13 +51,13 @@ Keep `main` up to date before starting new work:
 
 ```bash
 git checkout main && git pull
-git checkout -b feature/my-story
+git checkout -b SCRUM-<key>-my-story
 ```
 
 ## Deployment (Netlify)
 
 1. Netlify → *Add new site* → *Import an existing project* → GitHub → select this repo.
-2. Build command: *(leave empty)* · Publish directory: `.` (already set in `netlify.toml`).
+2. Build command `npm run build`, publish directory `dist` (already set in `netlify.toml`).
 3. Every push to `main` deploys to production; every Pull Request gets its own **deploy preview** link.
 
 ## Team
