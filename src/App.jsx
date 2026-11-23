@@ -13,8 +13,9 @@ import Risks from './pages/Risks.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Poker from './pages/Poker.jsx';
 import Bot from './pages/Bot.jsx';
+import Sources from './pages/Sources.jsx';
 
-const SCREENS = { home: Home, missions: Missions, lesson1: Lesson1, lesson2: Lesson2, quiz: Quiz, risks: Risks, dashboard: Dashboard, poker: Poker, bot: Bot };
+const SCREENS = { home: Home, missions: Missions, lesson1: Lesson1, lesson2: Lesson2, quiz: Quiz, risks: Risks, dashboard: Dashboard, poker: Poker, bot: Bot, sources: Sources };
 
 const AppContext = createContext(null);
 export const useApp = () => useContext(AppContext);
@@ -145,6 +146,7 @@ export default function App() {
         <div className="footer-inner">
           <span><strong>Sprint Quest</strong> · Agile Methodologies, university project</span>
           <span className="hand">made by our team for MDS, 2026</span>
+          <a className="footer-sources" href="#sources" aria-current={page === 'sources' ? 'page' : undefined}>Sources & references</a>
         </div>
       </footer>
     </AppContext.Provider>

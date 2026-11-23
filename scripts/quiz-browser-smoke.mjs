@@ -10,6 +10,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { QUESTIONS, STORAGE_KEY } from '../src/data.js';
 import { derive, emptyProgress, recordQuizAnswer } from '../src/progress.js';
 import { runPokerChecks } from './poker-browser-checks.mjs';
+import { runReferencesChecks } from './references-browser-checks.mjs';
 
 const base = process.env.SPRINT_QUEST_URL || 'http://localhost:5173';
 const executable = [process.env.SPRINT_QUEST_BROWSER,
@@ -28,6 +29,7 @@ let serial = 0;
 let sessionId;
 const pending = new Map();
 const runtimeErrors = [];
+const consoleErrors = [];
 
 function send(method, params = {}, session = sessionId) {
   return new Promise((resolve, reject) => {
@@ -119,6 +121,9 @@ try {
       if (message.error) entry.reject(new Error(message.error.message)); else entry.resolve(message.result);
     }
     if (message.method === 'Runtime.exceptionThrown') runtimeErrors.push(message.params.exceptionDetails.text);
+    if (message.method === 'Runtime.consoleAPICalled' && message.params.type === 'error') {
+      consoleErrors.push(message.params.args.map((argument) => argument.value ?? argument.description ?? '').join(' '));
+    }
     if (message.method === 'Fetch.requestPaused') {
       // Optional local transport bridge for environments where headless browser loopback is restricted.
       fetch(message.params.request.url).then(async (response) => send('Fetch.fulfillRequest', {
@@ -314,7 +319,9 @@ try {
   assert.equal(await evaluate("document.querySelector('.level-pill').getAttribute('aria-label')"), 'Level 1 · Rookie');
   console.log('PASS accessible level-up feedback, keyboard dismissal, repeated practice clicks, no reload replay, reset and unchanged Planning Poker XP');
   await runPokerChecks({ evaluate, send, click, navigate, route, viewport, screenshot, readProgress, waitFor });
+  await runReferencesChecks({ evaluate, send, route, navigate, viewport, screenshot, readProgress, waitFor });
   assert.deepEqual(runtimeErrors, []);
+  assert.deepEqual(consoleErrors, []);
   console.log('PASS zero-XP victory, reset and no browser JavaScript exceptions');
   console.log(`Screenshots: ${artifacts}`);
 } finally {

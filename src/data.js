@@ -17,6 +17,7 @@ export const PAGES = {
   dashboard: 'Dashboard',
   poker: 'Planning Poker',
   bot: 'Agile Bot',
+  sources: 'Sources & references',
 };
 export const MISSION_PAGES = ['lesson1', 'lesson2', 'quiz', 'risks'];
 
