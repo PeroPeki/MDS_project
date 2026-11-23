@@ -9,6 +9,7 @@ import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 import { QUESTIONS, STORAGE_KEY } from '../src/data.js';
 import { derive, emptyProgress, recordQuizAnswer } from '../src/progress.js';
+import { runPokerChecks } from './poker-browser-checks.mjs';
 
 const base = process.env.SPRINT_QUEST_URL || 'http://localhost:5173';
 const executable = [process.env.SPRINT_QUEST_BROWSER,
@@ -312,6 +313,7 @@ try {
   assert.equal(await evaluate("document.querySelector('.level-up-notice [role=status]').textContent"), '');
   assert.equal(await evaluate("document.querySelector('.level-pill').getAttribute('aria-label')"), 'Level 1 · Rookie');
   console.log('PASS accessible level-up feedback, keyboard dismissal, repeated practice clicks, no reload replay, reset and unchanged Planning Poker XP');
+  await runPokerChecks({ evaluate, send, click, navigate, route, viewport, screenshot, readProgress, waitFor });
   assert.deepEqual(runtimeErrors, []);
   console.log('PASS zero-XP victory, reset and no browser JavaScript exceptions');
   console.log(`Screenshots: ${artifacts}`);
