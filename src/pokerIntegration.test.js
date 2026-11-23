@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { afterEach, test } from 'node:test';
 import { QUESTIONS, STORAGE_KEY } from './data.js';
 import { derive, emptyProgress, loadProgress, recordQuizAnswer } from './progress.js';
-import { emptyPokerExercise, pokerReducer } from './poker.js';
+import { derivePokerRewards, emptyPokerExercise, pokerReducer } from './poker.js';
 
 afterEach(() => { delete globalThis.localStorage; });
 
@@ -24,9 +24,11 @@ test('completing, reviewing and restarting Poker preserves saved XP, level 5, ba
     exercise = pokerReducer(exercise, { type: 'select', estimate: '?' });
     exercise = pokerReducer(exercise, { type: 'reveal' });
   }
+  assert.deepEqual(derivePokerRewards(exercise), { insightStars: 3, pokerPro: true });
   exercise = pokerReducer(exercise, { type: 'navigate', index: 0 });
   exercise = pokerReducer(exercise, { type: 'restart' });
   assert.deepEqual(exercise, emptyPokerExercise());
+  assert.deepEqual(derivePokerRewards(exercise), { insightStars: 0, pokerPro: false });
   assert.equal(writes, 0);
   assert.deepEqual(loadProgress(), progress);
   assert.deepEqual(derive(loadProgress()), before);

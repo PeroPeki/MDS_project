@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { ESTIMATES } from './data.js';
-import { emptyPokerExercise, POKER_SCENARIOS, pokerReducer } from './poker.js';
+import { derivePokerRewards, emptyPokerExercise, POKER_SCENARIOS, pokerReducer } from './poker.js';
 
 const select = (state, estimate) => pokerReducer(state, { type: 'select', estimate });
 const reveal = (state) => pokerReducer(state, { type: 'reveal' });
@@ -10,8 +10,8 @@ const navigate = (state, index) => pokerReducer(state, { type: 'navigate', index
 test('three distinct scenarios provide scoped stories and reasoning for discussion estimates', () => {
   assert.equal(POKER_SCENARIOS.length, 3);
   assert.equal(new Set(POKER_SCENARIOS.map((scenario) => scenario.id)).size, 3);
-  assert.equal(POKER_SCENARIOS[0].title, 'Save favorite articles');
-  assert.equal(POKER_SCENARIOS[0].suggestedEstimate, 5);
+  assert.equal(POKER_SCENARIOS.find((story) => story.id === 'saved-articles').suggestedEstimate, 5);
+  assert.deepEqual(POKER_SCENARIOS.map((story) => story.title), ['Rename a task', 'Save favorite articles', 'Send due-date reminders']);
   assert.deepEqual(ESTIMATES, [1, 2, 3, 5, 8, 13, 21, '?']);
   for (const scenario of POKER_SCENARIOS) {
     assert.ok(ESTIMATES.includes(scenario.suggestedEstimate));
@@ -93,4 +93,35 @@ test('restart clears navigation, drafts and revealed estimates without mutating 
   assert.deepEqual(state, snapshot);
   assert.notStrictEqual(restarted.estimates, state.estimates);
   assert.notStrictEqual(restarted.revealed, state.revealed);
+});
+
+test('Insight Stars reward exploring a round, regardless of matching or unsure estimates', () => {
+  for (const estimate of [1, 21, '?']) {
+    let state = emptyPokerExercise();
+    assert.deepEqual(derivePokerRewards(state), { insightStars: 0, pokerPro: false });
+    for (let index = 0; index < POKER_SCENARIOS.length; index++) {
+      state = navigate(state, index);
+      state = select(state, estimate);
+      assert.equal(derivePokerRewards(state).insightStars, index);
+      state = reveal(state);
+      assert.deepEqual(derivePokerRewards(state), { insightStars: index + 1, pokerPro: index === 2 });
+    }
+  }
+});
+
+test('revisits and repeated reveals never duplicate stars; restart clears the local achievement', () => {
+  let state = emptyPokerExercise();
+  for (const index of [0, 2, 1]) state = reveal(select(navigate(state, index), '?'));
+  for (let repeat = 0; repeat < 20; repeat++) {
+    state = reveal(navigate(state, repeat % 3));
+    assert.deepEqual(derivePokerRewards(state), { insightStars: 3, pokerPro: true });
+  }
+  state = pokerReducer(state, { type: 'restart' });
+  assert.deepEqual(derivePokerRewards(state), { insightStars: 0, pokerPro: false });
+  assert.deepEqual(state, emptyPokerExercise());
+});
+
+test('reward derivation counts unique known explored scenarios and cannot exceed three stars', () => {
+  const state = { ...emptyPokerExercise(), revealed: POKER_SCENARIOS.flatMap((story) => [story.id, story.id]).concat('unknown') };
+  assert.deepEqual(derivePokerRewards(state), { insightStars: 3, pokerPro: true });
 });

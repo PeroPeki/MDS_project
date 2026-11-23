@@ -306,7 +306,7 @@ try {
   assert.equal(await evaluate("document.querySelector('.level-up-notice [role=status]').textContent"), '');
   // Planning Poker is still a practice exercise, with no new XP reward.
   const beforePoker = await readProgress();
-  await route('poker'); await click('.estimate-buttons button'); await click('#poker .card > .button');
+  await route('poker'); await click('.poker-hand-card'); await click('.poker-reveal');
   assert.deepEqual(await readProgress(), beforePoker);
   await route('dashboard'); await click('#dashboard .button.ghost');
   await waitFor(`${storage}.correct.length === 0 && ${storage}.opened.length === 0`);
