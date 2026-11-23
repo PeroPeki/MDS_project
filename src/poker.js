@@ -32,9 +32,16 @@ export const POKER_SCENARIOS = Object.freeze([
     rationale: '8 points reflects more integration and uncertainty than the other examples. A short investigation could reduce uncertainty; splitting preferences from delivery could produce smaller stories.',
     discussion: 'Which unknown would you investigate first, and how could the team split this story?',
   },
-].map(Object.freeze));
+// Start with a familiar edit, then add persistence and finally scheduling uncertainty.
+].sort((a, b) => a.suggestedEstimate - b.suggestedEstimate).map(Object.freeze));
 
 export const emptyPokerExercise = () => ({ currentIndex: 0, estimates: {}, revealed: [] });
+
+/** Local recognition for exploration, independent of estimates, XP and global badges. */
+export function derivePokerRewards(exercise) {
+  const insightStars = POKER_SCENARIOS.filter((scenario) => exercise.revealed.includes(scenario.id)).length;
+  return { insightStars, pokerPro: insightStars === POKER_SCENARIOS.length };
+}
 
 /** Session-only exercise state. It never writes learning progress or grants XP. */
 export function pokerReducer(state, action) {
