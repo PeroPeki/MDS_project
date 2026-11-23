@@ -231,6 +231,13 @@ nav {
 }
 .footer strong { color: var(--ink); }
 .footer .hand { font-weight: 400; font-size: 17px; color: var(--ink); }
+.footer-sources { display: inline-flex; align-items: center; min-height: 44px; color: var(--accent); text-underline-offset: 3px; }
+.reference-link { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.topic .risk-citation { margin-top: 14px; font-size: 14px; }
+.sources-page .references-list { max-width: 960px; margin: 28px 0 0; padding-left: 28px; }
+.sources-page .references-list li { padding: 18px 12px; border-bottom: 1px solid var(--line-strong); line-height: 1.8; }
+.sources-page .references-list li::marker { color: var(--muted); font-size: 14px; }
+.sources-page .references-list cite { font-style: italic; }
 
 /* ---------- Typography & generic components ---------- */
 

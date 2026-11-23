@@ -60,6 +60,14 @@ git checkout -b SCRUM-<key>-my-story
 2. Build command `npm run build`, publish directory `dist` (already set in `netlify.toml`).
 3. Every push to `main` deploys to production; every Pull Request gets its own **deploy preview** link.
 
+## Research & QA follow-up: Netlify badge
+
+The repository contains no application-owned Netlify promotional badge or badge-injection script. Removing an edge-injected **Powered by Netlify** badge remains an external configuration action, not a code fix.
+
+**Petar:** open the Netlify project, go to **Project configuration > General > Powered by Netlify badge**, switch it off and save. If the setting is locked, review the available plan options with the project owner. Then verify the public site in a fresh browser session. This action has not been performed or verified here.
+
+Netlify documents that the badge is injected at the edge and that the setting takes effect without a redeploy: [Powered by Netlify badge](https://docs.netlify.com/manage/projects/powered-by-netlify-badge/). No CSS hiding rules, script removal or security-policy workarounds were added.
+
 ## Team
 
 | Role | Member |
