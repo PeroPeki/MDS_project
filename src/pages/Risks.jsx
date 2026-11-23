@@ -3,8 +3,8 @@ import LessonHeader from '../components/LessonHeader.jsx';
 
 const RISKS = [
   { title: 'Mixed results', text: 'Research finds that gamification effects vary by context and user. Source: Hamari et al. (2014).' },
-  { title: 'Competition over collaboration', text: 'Individual leaderboards can pit teammates against each other instead of rewarding shared outcomes.' },
-  { title: 'Gaming the metric', text: 'If points reward ticket counts rather than value, teams may optimize the score instead of real outcomes.' },
+  { title: 'Competition over collaboration', text: 'Individual leaderboards can pit teammates against each other instead of rewarding shared outcomes. Source: Almeida et al. (2023).' },
+  { title: 'Gaming the metric', text: 'If points reward ticket counts rather than value, teams may optimize the score instead of real outcomes. Source: Almeida et al. (2023).' },
 ];
 
 export default function Risks() {

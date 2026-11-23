@@ -58,7 +58,7 @@ export const PRACTICES = [
     text: 'Invite everyone to identify what moves the team forward and what holds it back.',
     how: "Speed Boat is a visual activity adapted for Sprint Retrospectives, where the boat represents the team's progress and anchors represent obstacles slowing it down. Team members identify and discuss these obstacles to understand what prevents them from moving forward. The activity helps the team reflect on challenges and identify opportunities for improvement.",
     sources: [
-      { text: 'Hohmann, L. (2006). Innovation Games: Creating Breakthrough Products Through Collaborative Play. Addison-Wesley.', url: '' },
+      { text: 'Hohmann, L. (2006). Innovation Games: Creating Breakthrough Products Through Collaborative Play. Addison-Wesley.', url: 'https://www.informit.com/store/innovation-games-creating-breakthrough-products-through-9780321437297' },
     ],
   },
   {
