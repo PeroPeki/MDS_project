@@ -183,25 +183,10 @@ export const ESTIMATES = [1, 2, 3, 5, 8, 13, 21, '?'];
 
 export const MAX_XP = 10 + 10 + PRACTICES.length * 5 + QUESTIONS.length * QUIZ_XP_BY_ATTEMPT[0];
 
-/* Agile Bot: placeholder answers until BOTSchool.ai is connected (US-14) */
+/* Educational prompts to copy into the official BOTSchool widget. */
 export const BOT_SUGGESTIONS = [
   'What is Scrum?',
   'How can I gamify a sprint?',
   'What are the risks of gamification?',
   'Explain Planning Poker',
 ];
-
-export function botAnswer(s) {
-  const v = s.toLowerCase();
-  if (v.includes('poker') || v.includes('estimate'))
-    return 'Planning Poker is a collaborative estimation technique. Team members independently select story-point cards, reveal their estimates and discuss differences. Try the Planning Poker page!';
-  if (v.includes('risk') || v.includes('bad') || v.includes('competition'))
-    return 'Gamification can backfire when people chase points instead of value, or when leaderboards create competition. Reward team achievements and keep the learning goals clear.';
-  if (v.includes('gamif') || v.includes('sprint'))
-    return 'You can gamify sprint work with small XP rewards, shared badges, progress indicators, Planning Poker or a playful retrospective. Make sure rewards support collaboration.';
-  if (v.includes('scrum'))
-    return 'Scrum is a lightweight framework for helping teams deliver value through iterative work in Sprints. It includes accountabilities (Product Owner, Scrum Master, Developers), events and artifacts.';
-  if (v.includes('agile'))
-    return 'Agile is a mindset emphasizing collaboration, feedback, adapting to change and delivering value in small increments.';
-  return 'I can help with Scrum, Agile, gamification risks, sprint activities, or Planning Poker. Try one of the suggested questions!';
-}

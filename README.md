@@ -2,7 +2,7 @@
 
 An interactive learning website about **gamification in Scrum**, built as a university project for *Agile Methodologies*.
 
-Users complete four learning missions, earn XP, unlock badges, practise **Planning Poker** and ask questions to **Agile Bot** (chatbot, to be powered by BOTSchool.ai).
+Users complete four learning missions, earn XP, unlock badges, practise **Planning Poker** and ask questions to **Agile Bot** (powered by the official BOTSchool webchat).
 
 ## Project structure
 
@@ -14,7 +14,7 @@ MDS_project/
 ├── src/
 │   ├── main.jsx             # mounts <App />
 │   ├── App.jsx              # hash routing, toast, actions, page switch
-│   ├── data.js              # all content: missions, practices, quiz, badges, bot answers
+│   ├── data.js              # all content: missions, practices, quiz, badges, suggested bot questions
 │   ├── progress.js          # saved progress (localStorage) + derived XP, level, badges
 │   ├── styles.css           # all styles + responsive breakpoints (1000px, 850px, 530px)
 │   ├── components/          # Nav, Icon, MissionList, LessonHeader
@@ -36,6 +36,22 @@ npm run preview    # serve the build locally
 
 Pages are addressed with the URL hash, e.g. `/#missions`, `/#quiz`, `/#poker`, `/#bot`.
 Progress is stored in the browser's `localStorage` (key `sprintquest-progress-v1`).
+
+## Agile Bot (SCRUM-23 / US-14)
+
+The official BOTSchool Webchat loader is included once, immediately before `</body>` in `index.html`. Its public channel ID and service endpoint come from the supplied installation snippet; no private credentials or new dependencies are needed. Hash navigation changes the React page inside `#root`, leaving the loader and any widget it creates in place.
+
+The `#bot` page explains how to use the floating widget and offers questions to copy into it. It does not start another chat or call undocumented widget controls. The old predefined-response prototype has been removed.
+
+BOTSchool's website settings require a **public HTTPS website and explicitly reject localhost, including HTTPS localhost**. The application and its landing page can be developed locally, but this Webchat channel cannot be authorized for localhost. Local TLS certificates do not resolve that restriction.
+
+To verify the live widget, publish the feature to a Netlify deploy preview and add that exact public HTTPS origin to the BOTSchool channel's allowed websites. Keep the production entry `https://erasmuspr.netlify.app`. Deployment and channel authorization are manual steps; they have not been performed here. The localhost configuration request returned `403 origin_not_allowed`, whereas a request using the already approved production origin returned HTTP 200. A successful configuration response alone does not establish that live chat works.
+
+The external Knowledge Base is already configured with seven indexed Markdown documents and eleven approved references; its four successful retrieval scenarios were reported before this integration. This implementation does not modify or recreate it.
+
+Run `npm test` and `npm run build`. With Vite running in another terminal, run `npm run test:browser` for the existing regression suite plus Agile Bot keyboard, responsive layout and persistent-loader checks. The browser suite reports observed BOTSchool HTTP statuses separately: passing application checks do not establish that the third-party widget or replies work.
+
+See [the integration QA record](docs/SCRUM-23-agile-bot-qa.md) for results, acceptance criteria and the remaining Netlify checks.
 
 ## Team workflow
 

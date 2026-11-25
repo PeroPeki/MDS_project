@@ -11,6 +11,7 @@ import { QUESTIONS, STORAGE_KEY } from '../src/data.js';
 import { derive, emptyProgress, recordQuizAnswer } from '../src/progress.js';
 import { runPokerChecks } from './poker-browser-checks.mjs';
 import { runReferencesChecks } from './references-browser-checks.mjs';
+import { runBotChecks } from './bot-browser-checks.mjs';
 
 const base = process.env.SPRINT_QUEST_URL || 'http://localhost:5173';
 const executable = [process.env.SPRINT_QUEST_BROWSER,
@@ -30,6 +31,8 @@ let sessionId;
 const pending = new Map();
 const runtimeErrors = [];
 const consoleErrors = [];
+const botNetwork = [];
+const botRequests = new Map();
 
 function send(method, params = {}, session = sessionId) {
   return new Promise((resolve, reject) => {
@@ -121,6 +124,16 @@ try {
       if (message.error) entry.reject(new Error(message.error.message)); else entry.resolve(message.result);
     }
     if (message.method === 'Runtime.exceptionThrown') runtimeErrors.push(message.params.exceptionDetails.text);
+    if (message.method === 'Network.requestWillBeSent' && message.params.request.url.includes('.botschool.ai/')) {
+      botRequests.set(message.params.requestId, message.params.request.url);
+    }
+    if (message.method === 'Network.loadingFailed' && botRequests.has(message.params.requestId)) {
+      botNetwork.push({ url: botRequests.get(message.params.requestId), error: message.params.errorText, blockedReason: message.params.blockedReason });
+    }
+    if (message.method === 'Network.responseReceived' && message.params.response.url.includes('.botschool.ai/')) {
+      const { url, status } = message.params.response;
+      botNetwork.push({ url, status });
+    }
     if (message.method === 'Runtime.consoleAPICalled' && message.params.type === 'error') {
       consoleErrors.push(message.params.args.map((argument) => argument.value ?? argument.description ?? '').join(' '));
     }
@@ -320,6 +333,7 @@ try {
   console.log('PASS accessible level-up feedback, keyboard dismissal, repeated practice clicks, no reload replay, reset and unchanged Planning Poker XP');
   await runPokerChecks({ evaluate, send, click, navigate, route, viewport, screenshot, readProgress, waitFor });
   await runReferencesChecks({ evaluate, send, route, navigate, viewport, screenshot, readProgress, waitFor });
+  await runBotChecks({ evaluate, send, route, navigate, viewport, screenshot, readProgress, waitFor, botNetwork });
   assert.deepEqual(runtimeErrors, []);
   assert.deepEqual(consoleErrors, []);
   console.log('PASS zero-XP victory, reset and no browser JavaScript exceptions');
