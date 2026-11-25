@@ -1,62 +1,31 @@
-import { useEffect, useRef, useState } from 'react';
-import { BOT_SUGGESTIONS, botAnswer } from '../data.js';
+import { BOT_SUGGESTIONS } from '../data.js';
 
-/* Agile Bot: prototype with predefined answers. US-14 replaces botAnswer() with BOTSchool.ai. */
 export default function Bot() {
-  const [messages, setMessages] = useState([
-    { from: 'bot', text: "Hi! I'm Agile Bot. Ask me anything about Agile, Scrum or gamification." },
-  ]);
-  const [input, setInput] = useState('');
-  const boxRef = useRef(null);
-
-  useEffect(() => {
-    const box = boxRef.current;
-    if (box) box.scrollTop = box.scrollHeight;
-  }, [messages]);
-
-  const ask = (text) => {
-    setMessages((m) => [...m, { from: 'user', text }, { from: 'bot', text: botAnswer(text) }]);
-  };
-
-  const send = (e) => {
-    e.preventDefault();
-    const v = input.trim();
-    if (!v) return;
-    setInput('');
-    ask(v);
-  };
-
   return (
     <section id="bot" className="page active" aria-labelledby="bot-title">
-      <span className="eyebrow">ask the bot</span>
+      <span className="eyebrow">a little help along the way</span>
       <h1 id="bot-title" className="page-title lesson-title">Agile Bot</h1>
-      <p className="sub">Ask questions about Agile, Scrum, Planning Poker and gamification.</p>
-      <div className="chat-grid">
-        <aside className="card" aria-label="Suggested questions">
-          <strong>Suggested questions</strong>
-          {BOT_SUGGESTIONS.map((s) => (
-            <button key={s} onClick={() => ask(s)}>{s}</button>
-          ))}
-          <p className="small" style={{ marginTop: 25 }}>Prototype bot: predefined answers, no API or backend required.</p>
-        </aside>
-        <div className="card chat">
-          <div className="messages" ref={boxRef} role="log" aria-live="polite" aria-label="Chat messages">
-            {messages.map((m, i) => (
-              <div key={i} className={`bubble ${m.from}`}>{m.text}</div>
-            ))}
-          </div>
-          <form className="chat-entry" onSubmit={send}>
-            <label htmlFor="chatInput" className="sr-only">Your question</label>
-            <input
-              id="chatInput"
-              placeholder="Ask a question about Agile or Scrum…"
-              autoComplete="off"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            />
-            <button type="submit" className="button">Send <span className="arrow" aria-hidden="true">→</span></button>
-          </form>
-        </div>
+      <p className="sub">Explore Agile, Scrum, Planning Poker and gamification with our educational chatbot, powered by BOTSchool.</p>
+      <div className="bot-grid">
+        <section className="card bot-guide" aria-labelledby="bot-guide-title">
+          <span className="hand">Ask. Explore. Reflect.</span>
+          <h2 id="bot-guide-title" className="card-title">Start a conversation</h2>
+          <ol className="bot-steps">
+            <li>Open the floating chat widget in the bottom-right corner of any page.</li>
+            <li>Type a question, or copy one of the suggestions into the chat.</li>
+            <li>Ask a follow-up for an example you can try with your team.</li>
+          </ol>
+          <p className="small">Using a keyboard? Tab to the chat launcher and press Enter to open it.</p>
+          <p className="small">If the widget does not appear, check your connection and whether your browser blocks external chat content. You can keep exploring the <a href="#missions">learning missions</a>.</p>
+        </section>
+        <section className="card" aria-labelledby="bot-questions-title">
+          <h2 id="bot-questions-title" className="card-title">Questions to explore</h2>
+          <p>Choose a starting point for your next conversation:</p>
+          <ul className="bot-questions">
+            {BOT_SUGGESTIONS.map((question) => <li key={question}>{question}</li>)}
+          </ul>
+          <p className="small">Use the answers to support your learning and compare them with the course material and <a href="#sources">Sources &amp; references</a>.</p>
+        </section>
       </div>
     </section>
   );
