@@ -246,3 +246,32 @@
   .quiz-confetti { display: none; }
   .quiz-answer:not(:disabled):hover, .quiz-button:not(:disabled):hover, .quiz-map-step:hover { transform: none; }
 }
+
+/* SCRUM-37: readable text on phones. Answers and explanations at 15-16px,
+   labels and captions at least 11-13px. Sizes only; layout and colours unchanged. */
+@media (max-width: 767px) {
+  .quiz-hero p { font-size: 15px; }
+  .quiz-hero-tags span { font-size: 13px; }
+  .quiz-back { font-size: 14px; }
+  .quiz-saved { font-size: 12px; }
+  .quiz-kicker, .quiz-label { font-size: 11px; }
+  .quiz-progress-copy strong > span, .quiz-xp-counter strong > span { font-size: 14px; }
+  .quiz-progress-note, .quiz-xp-counter small { font-size: 13px; }
+  .quiz-question-number, .quiz-attempt-pill { font-size: 12px; }
+  .quiz-card-hint { font-size: 14px; }
+  .quiz-answer-text { font-size: 16px; }
+  .quiz-answer-letter { font-size: 12px; }
+  .quiz-answer-feedback strong { font-size: 15px; }
+  .quiz-answer-feedback p { font-size: 15px; }
+  .quiz-answer-feedback small { font-size: 13px; }
+  .quiz-navigation .quiz-button { font-size: 14px; }
+  .quiz-navigation-note { font-size: 13px; }
+  .quiz-reward-tier > span { font-size: 14px; }
+  .quiz-rewards-panel > p { font-size: 14px; }
+  .quiz-map-key { font-size: 12px; }
+  .quiz-victory-intro, .quiz-victory-message { font-size: 15px; }
+  .quiz-victory-stats dt, .quiz-victory-stats dd > span, .quiz-rating-note { font-size: 13px; }
+  .quiz-victory-badge small { font-size: 11px; }
+  .quiz-victory-badge p { font-size: 13px; }
+  .quiz-text-button { font-size: 14px; }
+}

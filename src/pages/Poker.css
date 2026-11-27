@@ -296,3 +296,45 @@
   .poker-game *, .poker-game *::before, .poker-game *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .poker-game .poker-confetti, .poker-game .poker-star-pop { display: none; }
 }
+
+/* SCRUM-37: readable text on phones. Story, explanations and buttons at 14-16px,
+   labels and captions at least 9-12px. Sizes only; layout and colours unchanged.
+   Purely decorative micro text (card signatures, table stamp) is left as it is. */
+@media (max-width: 767px) {
+  .poker-game .poker-room-brand { font-size: 9px; }
+  .poker-game .poker-session { font-size: 11px; }
+  .poker-game .poker-kicker, .poker-game .poker-story .poker-kicker { font-size: 10px; }
+  .poker-game .poker-hero p { font-size: 15px; }
+  .poker-game .poker-insights small { font-size: 12px; }
+  .poker-game .poker-progress-caption { font-size: 10px; }
+  .poker-game .poker-steps small { font-size: 10px; }
+  .poker-game .poker-steps button > span:nth-child(2) { font-size: 13px; }
+  .poker-game .poker-user-story { font-size: 16px; }
+  .poker-game .poker-scope summary { font-size: 14px; }
+  .poker-game .poker-scope p { font-size: 15px; }
+  .poker-game .poker-story-note p { font-size: 14px; }
+  .poker-game .poker-seat-label { font-size: 10px; }
+  .poker-game .poker-seat-caption { font-size: 12px; }
+  .poker-game .poker-hand-heading > span { font-size: 13px; }
+  .poker-game .poker-card-state { font-size: 10px; }
+  .poker-game .poker-reveal-row > span { font-size: 13px; }
+  .poker-game .poker-reveal-row small { font-size: 12px; }
+  .poker-game .poker-button, .poker-game .poker-controls > .poker-button,
+  .poker-game .poker-reveal-row .poker-button { font-size: 14px; }
+  .poker-game .poker-error { font-size: 14px; }
+  .poker-game .poker-feedback-heading p { font-size: 16px; }
+  .poker-game .poker-factor summary { font-size: 14px; }
+  .poker-game .poker-factor-content p { font-size: 15px; }
+  .poker-game .poker-reflection { font-size: 15px; }
+  .poker-game .poker-reflection strong { font-size: 11px; }
+  .poker-game .poker-round-position { font-size: 11px; }
+  .poker-game .poker-bottom-note p { font-size: 14px; }
+  .poker-game .poker-text-button { font-size: 14px; }
+  .poker-game .poker-victory-intro, .poker-game .poker-victory-note { font-size: 14px; }
+  .poker-game .poker-pro-achievement small { font-size: 9px; }
+  .poker-game .poker-pro-achievement span { font-size: 12px; }
+  .poker-game .poker-summary caption { font-size: 11px; }
+  .poker-game .poker-summary th, .poker-game .poker-summary td { font-size: 14px; }
+  .poker-game .poker-summary thead th { font-size: 11px; }
+  .poker-game .poker-summary tbody th > span { font-size: 10px; }
+}
