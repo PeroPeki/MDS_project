@@ -1,6 +1,6 @@
 # SCRUM-37: Mobile responsiveness and navigation fixes
 
-Branch: `petar-sprint3`. Commits: `fb987cb` (navigation and touch targets) and `44afd35` (text sizes).
+Branch: `petar-sprint3`, Pull Request #12. Commits: `fb987cb` (navigation and touch targets), `44afd35` (text sizes) and `c796c7c` (browser test fixes and Mission 2 source links).
 
 ## Why we did this
 
@@ -24,7 +24,7 @@ Sprint Quest is a learning site that students will mostly open on a phone. Befor
 
 ### 2. 44px tap targets on every narrow screen
 
-The existing 44px rule now applies on touch screens **and** on any screen narrower than 768px.
+The existing 44px rule now applies on touch screens **and** on any screen narrower than 768px. The source links in opened practice cards (Mission 2) also got a 44px minimum height, because they stand alone in a list and are not part of a sentence.
 
 ### 3. Readable text on phones
 
@@ -45,7 +45,7 @@ We added `scroll-padding-top`. When keyboard users tab through a long page, the 
 
 ## How we checked it
 
-- Measured in headless Chrome at 320, 375, 768 and 1280px on all ten pages:
+- Measured in headless Chrome at 320, 375, 768, 1024 and 1280px on all ten pages, with touch emulation on and off:
   - the starting state;
   - eight interactive states: role chosen, all progress complete, quiz victory, quiz after an answer, all practice cards open, Planning Poker after a reveal, and Planning Poker results.
   - Result: no horizontal overflow, no element outside the screen and no button or link under 44px below 768px. Links inside sentences are exempt under WCAG 2.5.8.
@@ -56,7 +56,9 @@ We added `scroll-padding-top`. When keyboard users tab through a long page, the 
   - a link closes it and moves focus to the new page heading;
   - a tap outside closes it;
   - at 768 and 1280px the button is hidden and the links are visible.
+- A second automated test went through the full user journey at 1280px and 375px: roles, all four missions, quiz XP 10/5/0, levels, badges, reset, reload, Planning Poker, Agile Bot, Sources, Back/Forward. No app errors were found.
 - `npm run build` passes. `npm test`: 77 of 77 pass.
+- Browser console on the deploy preview: no app errors. The only messages come from BOTSchool (HTTP 403), because the preview address is not on the widget's list of approved websites.
 - Lighthouse Accessibility (Mobile) on the Netlify deploy preview of PR #12, 28 November 2026: Home 100, Mission 2 (Lesson 2) 100, Quiz 100, Planning Poker 100.
 - `npm run test:browser` (the team's browser suite): all 11 sections pass after two small script fixes (see the PR description).
 

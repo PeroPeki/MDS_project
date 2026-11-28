@@ -69,5 +69,6 @@ Put the mouse away.
 |-------|--------|-------|
 | Pages at 375 / 768 / 1280px | [TODO Petar] | |
 | Keyboard only | [TODO Petar] | |
-| Lighthouse Home / Quiz / Poker | [TODO Petar] | |
+| Lighthouse Home / Mission 2 / Quiz / Poker | 100 / 100 / 100 / 100 | Mobile, deploy preview of PR #12, 28 November 2026 |
+| Browser console (deploy preview) | No app errors | Only the expected BOTSchool 403, because the preview address is not approved |
 | Real phone (optional) | [TODO Petar] | |

@@ -2,56 +2,127 @@
 
 An interactive learning website about **gamification in Scrum**, built as a university project for *Agile Methodologies*.
 
-Users complete four learning missions, earn XP, unlock badges, practise **Planning Poker** and ask questions to **Agile Bot** (powered by the official BOTSchool webchat).
+Users complete four learning missions, earn XP, level up, unlock badges, practise **Planning Poker** and ask questions to **Agile Bot** (powered by the official BOTSchool webchat).
+
+**Live site:** https://erasmuspr.netlify.app
+
+## Features
+
+- **Four learning missions:**
+  1. What is gamification?
+  2. Gamified practices in a sprint (four expandable practice cards).
+  3. A quiz with 10 questions.
+  4. When gamification backfires.
+- **XP, levels and badges.** Earning XP:
+  - 10 XP per completed lesson;
+  - 5 XP per practice card;
+  - 10 / 5 / 0 XP per quiz question, depending on the attempt.
+
+  There is 140 XP in total, five levels (Rookie to Scrum Pro) and four badges.
+- **Learning roles:** Developer and Scrum Master. Each role suggests its own mission order.
+- **Planning Poker:** three user stories to estimate, with Insight Stars. It gives no XP.
+- **Agile Bot:** a page that explains the BOTSchool chat widget (see below).
+- **Sources & references:** eleven references, linked from the footer.
+- **Progress is saved in the browser.** No account is needed.
 
 ## Project structure
 
-Built with **React + Vite**.
+Built with **React 19 + Vite 6**. There are no other runtime dependencies.
 
 ```
 MDS_project/
-├── index.html               # Vite entry (fonts, favicon, #root)
+├── index.html               # Vite entry (fonts, favicon, #root, BOTSchool loader)
 ├── src/
 │   ├── main.jsx             # mounts <App />
-│   ├── App.jsx              # hash routing, toast, actions, page switch
+│   ├── App.jsx              # hash routing, toast, actions, focus on page change
 │   ├── data.js              # all content: missions, practices, quiz, badges, suggested bot questions
 │   ├── progress.js          # saved progress (localStorage) + derived XP, level, badges
-│   ├── styles.css           # all styles + responsive breakpoints (1000px, 850px, 530px)
-│   ├── components/          # Nav, Icon, MissionList, LessonHeader
-│   └── pages/               # Home, Missions, Lesson1, Lesson2, Quiz, Risks, Dashboard, Poker, Bot
-├── netlify.toml             # build: npm run build, publish: dist
+│   ├── levels.js            # the five levels and XP thresholds
+│   ├── quiz.js              # quiz order, answer shuffling, stars
+│   ├── poker.js             # Planning Poker scenarios and exercise state
+│   ├── references.js        # the eleven references shown on the Sources page
+│   ├── *.test.js            # unit tests (Node.js test runner)
+│   ├── styles.css           # shared styles; main breakpoints 1000, 850, 768 (mobile menu) and 530px
+│   ├── components/          # Nav, Icon, MissionList, LessonHeader, LevelProgress, LevelUpNotice,
+│   │                        # ReferenceLink, RouteNote, quiz/ and poker/ sub-components
+│   └── pages/               # Home, Missions, Lesson1, Lesson2, Quiz, Risks, Dashboard, Poker, Bot, Sources
+│                            # (Quiz.css and Poker.css hold the styles of those two pages)
+├── scripts/                 # optional browser checks (run through Chrome)
+├── docs/                    # QA records and Sprint 3 drafts
+├── netlify.toml             # build: npm run build, publish: dist, Node 22
 └── .github/pull_request_template.md   # Definition of Done checklist for every PR
 ```
 
 ## Run locally
 
-Needs Node 20+.
+Use Node 22, the version Netlify builds with. The browser checks need Node 22 or newer.
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173
 npm run build      # production build into dist/
 npm run preview    # serve the build locally
+npm test           # unit tests
 ```
 
-Pages are addressed with the URL hash, e.g. `/#missions`, `/#quiz`, `/#poker`, `/#bot`.
+Pages are addressed with the URL hash, e.g. `/#missions`, `/#quiz`, `/#poker`, `/#bot`, `/#sources`.
 Progress is stored in the browser's `localStorage` (key `sprintquest-progress-v1`).
+
+### Browser checks
+
+With `npm run dev` running in another terminal, run `npm run test:browser`. The script looks for Chrome or Edge in the usual Windows and Linux locations. On a Mac, give it the path:
+
+```bash
+SPRINT_QUEST_BROWSER="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" npm run test:browser
+```
+
+The suite checks the following and reports BOTSchool HTTP statuses separately:
+- the quiz, XP, roles, levels and Planning Poker;
+- the references;
+- the Agile Bot page;
+- layout at several widths.
+
+Passing application checks do not prove that the third-party chat widget works.
+
+## Mobile and accessibility (SCRUM-37)
+
+- **Below 768px the page links are behind a menu button.**
+  - The button has `aria-expanded` and `aria-controls`.
+  - It closes on link click, Escape or a tap outside.
+  - From 768px up the full navigation is shown.
+- **Buttons and standalone links are at least 44px tall** on touch screens and on screens narrower than 768px.
+- **Reading text is 15 to 16px on phones.**
+- **Keyboard support:**
+  - a "Skip to content" link;
+  - focus moves to the page heading on every page change;
+  - a visible focus outline;
+  - focused elements are not hidden under the sticky header.
+- **Animations turn off** when the system asks for reduced motion.
+- **Tested** at 320, 375, 768, 1024 and 1280px. Lighthouse Accessibility (Mobile) on the deploy preview of PR #12 (28 November 2026): Home, Mission 2, Quiz and Planning Poker all scored 100.
+
+See [docs/sprint3/scrum-37-summary.md](docs/sprint3/scrum-37-summary.md) for details.
 
 ## Agile Bot (SCRUM-23 / US-14)
 
-The official BOTSchool Webchat loader is included once, immediately before `</body>` in `index.html`. Its public channel ID and service endpoint come from the supplied installation snippet; no private credentials or new dependencies are needed. Hash navigation changes the React page inside `#root`, leaving the loader and any widget it creates in place.
+**Setup**
+- The official BOTSchool Webchat loader is included once, just before `</body>` in `index.html`.
+- Its public channel ID and service endpoint come from the supplied installation snippet. No private credentials or new dependencies are needed.
+- Hash navigation only changes the React page inside `#root`, so the loader and its widget stay in place.
 
-The `#bot` page explains how to use the floating widget and offers questions to copy into it. It does not start another chat or call undocumented widget controls. The old predefined-response prototype has been removed.
+**The `#bot` page**
+- It explains how to use the floating widget and offers questions to copy into it.
+- It does not start another chat or call undocumented widget controls.
 
-BOTSchool's website settings require a **public HTTPS website and explicitly reject localhost, including HTTPS localhost**. The application and its landing page can be developed locally, but this Webchat channel cannot be authorized for localhost. Local TLS certificates do not resolve that restriction.
+**Where the widget works**
+- BOTSchool only allows **approved public HTTPS websites**. It explicitly rejects localhost, including HTTPS localhost, so the widget cannot be tested locally.
+- The production address `https://erasmuspr.netlify.app` is on the approved list.
+- A Netlify deploy preview has its own address. Unless that address is added to the BOTSchool channel's allowed websites, the widget does not appear and the console shows `403 Forbidden`. This was observed on the deploy preview of PR #12 on 28 November 2026.
 
-To verify the live widget, publish the feature to a Netlify deploy preview and add that exact public HTTPS origin to the BOTSchool channel's allowed websites. Keep the production entry `https://erasmuspr.netlify.app`. Deployment and channel authorization are manual steps; they have not been performed here. The localhost configuration request returned `403 origin_not_allowed`, whereas a request using the already approved production origin returned HTTP 200. A successful configuration response alone does not establish that live chat works.
+**Knowledge Base**
+- The external Knowledge Base is configured in BOTSchool, with seven indexed Markdown documents and eleven approved references.
+- This repository does not modify it.
 
-The external Knowledge Base is already configured with seven indexed Markdown documents and eleven approved references; its four successful retrieval scenarios were reported before this integration. This implementation does not modify or recreate it.
-
-Run `npm test` and `npm run build`. With Vite running in another terminal, run `npm run test:browser` for the existing regression suite plus Agile Bot keyboard, responsive layout and persistent-loader checks. The browser suite reports observed BOTSchool HTTP statuses separately: passing application checks do not establish that the third-party widget or replies work.
-
-See [the integration QA record](docs/SCRUM-23-agile-bot-qa.md) for results, acceptance criteria and the remaining Netlify checks.
+See [the integration QA record](docs/SCRUM-23-agile-bot-qa.md) for results and acceptance criteria.
 
 ## Team workflow
 
@@ -73,16 +144,24 @@ git checkout -b SCRUM-<key>-my-story
 ## Deployment (Netlify)
 
 1. Netlify → *Add new site* → *Import an existing project* → GitHub → select this repo.
-2. Build command `npm run build`, publish directory `dist` (already set in `netlify.toml`).
-3. Every push to `main` deploys to production; every Pull Request gets its own **deploy preview** link.
+2. Build command `npm run build`, publish directory `dist`, Node 22 (already set in `netlify.toml`).
+3. Every push to `main` deploys to production. Every Pull Request gets its own **deploy preview** link.
 
-## Research & QA follow-up: Netlify badge
+### "Powered by Netlify" badge
 
-The repository contains no application-owned Netlify promotional badge or badge-injection script. Removing an edge-injected **Powered by Netlify** badge remains an external configuration action, not a code fix.
+- Netlify adds a small "Powered by Netlify" badge to the live site. It is not part of this repository.
+- On 28 November 2026 we checked the setting in **Project configuration > General > Powered by Netlify badge**. Hiding the badge is only available on paid Netlify plans, and this project uses the free plan.
+- **Decision:** keep the badge. We do not hide it with CSS or scripts.
+- More information: [Powered by Netlify badge](https://docs.netlify.com/manage/projects/powered-by-netlify-badge/).
 
-**Petar:** open the Netlify project, go to **Project configuration > General > Powered by Netlify badge**, switch it off and save. If the setting is locked, review the available plan options with the project owner. Then verify the public site in a fresh browser session. This action has not been performed or verified here.
+## Documentation
 
-Netlify documents that the badge is injected at the edge and that the setting takes effect without a redeploy: [Powered by Netlify badge](https://docs.netlify.com/manage/projects/powered-by-netlify-badge/). No CSS hiding rules, script removal or security-policy workarounds were added.
+- [docs/SCRUM-23-agile-bot-qa.md](docs/SCRUM-23-agile-bot-qa.md): Agile Bot integration QA record.
+- [docs/sprint3/](docs/sprint3/): Sprint 3 drafts:
+  - final report outline;
+  - Review and Retrospective templates;
+  - SCRUM-37 summary and manual test checklist;
+  - PR description.
 
 ## Team
 
@@ -95,6 +174,8 @@ Netlify documents that the badge is injected at the edge and that the setting ta
 | Research & QA | Member 5 |
 
 ## References
+
+The site lists all eleven references on its **Sources & references** page (`/#sources`), from `src/references.js`. The two core papers are:
 
 - Deterding, S., Dixon, D., Khaled, R., & Nacke, L. (2011). *From game design elements to gamefulness: defining "gamification".*
 - Hamari, J., Koivisto, J., & Sarsa, H. (2014). *Does gamification work? A literature review of empirical studies on gamification.*

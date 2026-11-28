@@ -3,7 +3,7 @@
 Course: Metodologias de Desenvolvimento de Software, IPC Coimbra.
 Final presentation: Monday 30 November 2026.
 
-Facts marked "(from repo)" were checked in the Git repository on 27 November 2026. Everything marked [TODO Petar: ...] must be filled in by the team.
+Facts marked "(from repo)" were checked in the Git repository on 27 and 28 November 2026. Everything marked [TODO Petar: ...] must be filled in by the team.
 
 ## 1. Cover page and team
 
@@ -131,7 +131,8 @@ Repeat this section for Sprints 1, 2 and 3.
 Notes for Sprint 3 (from repo):
 
 - SCRUM-23 (Agile Bot) was merged on 25 November 2026.
-- SCRUM-37 (mobile responsiveness) was done on branch `petar-sprint3`. See `docs/sprint3/scrum-37-summary.md`.
+- SCRUM-37 (mobile responsiveness) and SCRUM-40 (Sprint 3 documentation) were done on branch `petar-sprint3`, Pull Request #12. See `docs/sprint3/scrum-37-summary.md`. [TODO Petar: add the review and merge date]
+- "Powered by Netlify" badge: hiding it is only available on paid Netlify plans (checked on 28 November 2026). The team decided to keep it.
 - Templates for the Sprint 3 Review and Retrospective are in `docs/sprint3/sprint3-minutes-template.md`.
 
 ## 6. Technical overview (from repo)
@@ -139,8 +140,8 @@ Notes for Sprint 3 (from repo):
 - Stack:
   - React 19 and Vite 6;
   - no other runtime dependencies;
-  - unit tests with the Node.js built-in test runner (77 tests passing on 27 November 2026);
-  - optional browser checks driven through Chrome.
+  - unit tests with the Node.js built-in test runner (77 tests passing on 28 November 2026);
+  - browser checks driven through Chrome (11 of 11 sections passing on 28 November 2026).
 - Structure:
   - hash routing (`#missions`, `#quiz`, ...), so every page can be refreshed and linked;
   - all content in `src/data.js`;
@@ -162,10 +163,16 @@ Notes for Sprint 3 (from repo):
 
 Known entry for Sprint 3:
 
-- Claude Code (Anthropic) was used on 27 November 2026 by Petar for SCRUM-37 and SCRUM-40:
+- Claude Code (Anthropic) was used on 27 and 28 November 2026 by Petar for SCRUM-37 and SCRUM-40:
   - audit of the mobile layout and the code changes;
-  - first drafts of these documents.
-- Petar reviewed the changes. [TODO Petar: confirm and describe the manual review and tests you did.]
+  - two test sub-agents (Claude Sonnet) checked the layout, keyboard use and the full user journey;
+  - first drafts of these documents and the README update.
+- Petar checked the result:
+  - Lighthouse on the deploy preview;
+  - the browser console;
+  - screenshots and the PR description.
+
+  [TODO Petar: add your manual checklist results and the teammate review.]
 
 ## 9. Accessibility and responsive design (from repo)
 
@@ -181,7 +188,7 @@ Measures in the code:
   - at least 44px tap targets on narrow screens;
   - 15 to 16px reading text on phones;
   - focused elements are not hidden behind the sticky header.
-- Tested at 320, 375, 768 and 1280px with no horizontal scrolling.
+- Tested at 320, 375, 768, 1024 and 1280px with no horizontal scrolling.
 
 Lighthouse Accessibility score (Mobile), Netlify deploy preview of PR #12, 28 November 2026: Home 100, Mission 2 100, Quiz 100, Planning Poker 100. [TODO Petar: repeat on the live site after merge]
 
