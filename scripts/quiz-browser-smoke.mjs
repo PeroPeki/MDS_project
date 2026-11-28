@@ -156,6 +156,7 @@ try {
   if (process.env.SPRINT_QUEST_BRIDGE) await send('Fetch.enable', { patterns: [{ urlPattern: `${base}/*`, requestStage: 'Request' }] });
   await viewport(1440);
   await send('Page.navigate', { url: 'data:text/html,<h1>Browser ready</h1>' });
+  await waitFor("!!document.querySelector('h1')"); // navigate does not wait for the page to load
   assert.equal(await evaluate('document.querySelector("h1").textContent'), 'Browser ready');
   console.log('Headless browser connected. Opening local quiz…');
   await navigate();

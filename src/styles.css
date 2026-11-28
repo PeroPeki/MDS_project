@@ -785,6 +785,8 @@ h2.card-title { font-size: 22px; margin: 1em 0 .7em; }
   .button, .links button { min-height: 44px; }
   .back { min-height: 44px; margin-bottom: 12px; }
   .route-actions .button { padding: 0 4px; }
+  /* standalone source links in opened practice cards (not inline in a sentence) */
+  .practice-sources a { display: inline-flex; align-items: center; min-height: 44px; }
 }
 
 /* ---------- Mobile navigation (SCRUM-37) ----------
