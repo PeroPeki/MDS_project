@@ -61,7 +61,10 @@ Use Chrome DevTools device mode. Test with touch emulation on and off.
 
 ## Notes for the reviewer
 
-- `npm run test:browser` stops at its first step on Petar's Mac. The step only opens a test page (`data:text/html,<h1>Browser ready</h1>`), before the app loads. It looks like a timing issue in the script, not something this PR caused. Please run it on your machine if you can.
+- `scripts/quiz-browser-smoke.mjs`: the suite crashed at its first step because it read a test page before it had loaded. It now waits for the page. This was an old timing issue, not caused by this PR.
+- `scripts/bot-browser-checks.mjs`: the Agile Bot keyboard check ran at 375px, where the nav links are now behind the menu button, so it could not reach "Agile Bot". This PR caused that failure. The check now sets a 1440px viewport first, because it tests the desktop navigation. The mobile menu itself is checked separately (see "How to test").
+- `src/styles.css`: source links in opened practice cards (Mission 2) are now at least 44px tall on narrow screens.
+- To run the browser suite on a Mac, set the browser path: `SPRINT_QUEST_BROWSER="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" npm run test:browser` (with `npm run dev` running).
 - `package-lock.json` has a local npm-version change (removed `libc` fields). It is not part of this PR.
 
 ## Screenshots
