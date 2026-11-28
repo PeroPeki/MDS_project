@@ -36,6 +36,10 @@
 
 * { box-sizing: border-box; }
 
+/* Keep elements reached with Tab (or a scroll) clear of the sticky nav (WCAG 2.4.11). */
+html { scroll-padding-top: 110px; }
+@media (max-width: 767px) { html { scroll-padding-top: 76px; } }
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -174,6 +178,9 @@ nav {
   height: 8px;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M2 5 C 25 2, 55 7, 98 3' fill='none' stroke='%231f6b63' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
 }
+
+/* Mobile menu toggle (SCRUM-37). Hidden from 768px up, where the full nav is shown. */
+.nav-toggle { display: none; }
 
 .xp-pill {
   display: inline-flex;
@@ -772,10 +779,84 @@ h2.card-title { font-size: 22px; margin: 1em 0 .7em; }
 @media (max-width: 359px) {
   .level-pill { display: none; } /* level is still on the Home board and the Dashboard */
 }
-@media (pointer: coarse) {
+/* 44px touch targets on touch screens and on every narrow screen (SCRUM-37):
+   a 375px window with a mouse, or DevTools without touch emulation, needs them too. */
+@media (pointer: coarse), (max-width: 767px) {
   .button, .links button { min-height: 44px; }
   .back { min-height: 44px; margin-bottom: 12px; }
   .route-actions .button { padding: 0 4px; }
+  /* standalone source links in opened practice cards (not inline in a sentence) */
+  .practice-sources a { display: inline-flex; align-items: center; min-height: 44px; }
+}
+
+/* ---------- Mobile navigation (SCRUM-37) ----------
+   One header row (brand, XP, level, menu button); the page links open below it
+   as full-width 48px rows. Comes after the 850px/530px nav rules so it wins. */
+@media (max-width: 767px) {
+  .navinner { flex-wrap: wrap; gap: 0 8px; min-height: 60px; padding: 8px 12px; }
+  .brand { order: 1; margin-right: auto; }
+  .xp-pill { order: 2; }
+  .level-pill { order: 3; }
+  .nav-toggle {
+    order: 4;
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 2px solid var(--ink);
+    border-radius: var(--r);
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+  .nav-toggle[aria-expanded="true"] { background: var(--note-yellow); }
+  /* three bars that turn into an X when the menu is open */
+  .nav-toggle-bars, .nav-toggle-bars::before, .nav-toggle-bars::after,
+  .nav-toggle-bars > span { display: block; width: 20px; height: 2px; background: currentColor; border-radius: 1px; }
+  .nav-toggle-bars { position: relative; background: none; }
+  .nav-toggle-bars::before, .nav-toggle-bars::after { content: ""; position: absolute; left: 0; transition: transform .18s; }
+  .nav-toggle-bars::before { top: -6px; }
+  .nav-toggle-bars::after { top: 6px; }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bars > span { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bars::before { transform: translateY(6px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bars::after { transform: translateY(-6px) rotate(-45deg); }
+
+  .links {
+    order: 5;
+    display: none;
+    flex: 1 1 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin-top: 8px;
+    padding: 0 0 4px;
+    border-top: 1px dashed var(--line-strong);
+  }
+  .links.is-open { display: flex; }
+  .links button {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 4px 12px 14px;
+    text-align: left;
+    font-size: 16px;
+    font-stretch: normal;
+    border-bottom: 1px dashed var(--line);
+  }
+  .links button:last-child { border-bottom: 0; }
+  /* active page: a marker bar on the left instead of the underline */
+  .links button[aria-current="page"] { font-weight: 800; }
+  .links button[aria-current="page"]::after { left: 0; right: auto; top: 12px; bottom: 12px; width: 4px; height: auto; background: var(--accent); }
+}
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .links.is-open { animation: practice-open .18s ease-out; }
+}
+
+/* Readable body text on phones (SCRUM-37): reading copy at 16px. Labels stay smaller. */
+@media (max-width: 767px) {
+  .mission p, .topic p, .role small, .practice .text, .practice-details p { font-size: 16px; }
+  .practice-sources, .topic .risk-citation { font-size: 15px; }
+  .badge p { font-size: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

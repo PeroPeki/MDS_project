@@ -14,6 +14,8 @@ export async function runBotChecks({ evaluate, send, route, navigate, viewport, 
   const requestCount = await evaluate("performance.getEntriesByType('resource').filter(entry => entry.name === 'https://webchat-cc.ng.botschool.ai/loader.js').length");
 
   // Use the existing navigation button with a keyboard, including its focus indicator.
+  // Desktop width: earlier checks end at 375px, where .links is collapsed behind .nav-toggle (SCRUM-37).
+  await viewport(1440);
   await evaluate("[...document.querySelectorAll('.links button')].find(button => button.textContent === 'Agile Bot').focus()");
   assert.equal(await evaluate('getComputedStyle(document.activeElement).outlineWidth'), '3px');
   async function key(key, code) {
