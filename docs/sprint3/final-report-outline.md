@@ -183,7 +183,7 @@ Measures in the code:
   - focused elements are not hidden behind the sticky header.
 - Tested at 320, 375, 768 and 1280px with no horizontal scrolling.
 
-Lighthouse Accessibility score: [TODO Petar: score on the deploy preview and on the live site]
+Lighthouse Accessibility score (Mobile), Netlify deploy preview of PR #12, 28 November 2026: Home 100, Mission 2 100, Quiz 100, Planning Poker 100. [TODO Petar: repeat on the live site after merge]
 
 ## 10. Lessons learned
 

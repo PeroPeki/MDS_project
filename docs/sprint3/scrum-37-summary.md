@@ -57,7 +57,8 @@ We added `scroll-padding-top`. When keyboard users tab through a long page, the 
   - a tap outside closes it;
   - at 768 and 1280px the button is hidden and the links are visible.
 - `npm run build` passes. `npm test`: 77 of 77 pass.
-- The Lighthouse score and manual phone testing are still to do. See the manual test checklist in the PR description.
+- Lighthouse Accessibility (Mobile) on the Netlify deploy preview of PR #12, 28 November 2026: Home 100, Mission 2 (Lesson 2) 100, Quiz 100, Planning Poker 100.
+- `npm run test:browser` (the team's browser suite): all 11 sections pass after two small script fixes (see the PR description).
 
 ## For the Sprint Review demo (about 2 minutes)
 
@@ -66,4 +67,4 @@ We added `scroll-padding-top`. When keyboard users tab through a long page, the 
 3. Use only the keyboard: Tab to the menu button, Enter, Tab through the links, Escape.
 4. Show the Quiz at 375px: answers are now easy to read and tap.
 5. Switch to 1280px: the desktop navigation looks exactly as before.
-6. [TODO Petar: add the Lighthouse Accessibility score from the deploy preview.]
+6. Show the Lighthouse Accessibility result: 100 on Home, Mission 2, Quiz and Planning Poker (mobile).

@@ -54,8 +54,9 @@ Use Chrome DevTools device mode. Test with touch emulation on and off.
 - [ ] `npm test` passes (checked locally: 77 of 77)
 - [ ] Works at 375px and 1280px (also checked at 320px and 768px)
 - [ ] Keyboard accessible (Tab / Enter / Escape), visible focus, no colour-only information
-- [ ] Lighthouse Accessibility 90 or more on the deploy preview
-- [ ] No errors in the browser console
+- [x] Lighthouse Accessibility 90 or more on the deploy preview
+      (Mobile, deploy-preview-12: Home 100, Lesson 2 100, Quiz 100, Poker 100)
+- [x] No errors in the browser console (Except Botschool error)
 - [ ] Progress (XP, badges) still saves and loads correctly
 - [ ] Checked on the Netlify deploy preview
 
@@ -73,4 +74,3 @@ Use Chrome DevTools device mode. Test with touch emulation on and off.
 |---------|--------|
 | [TODO Petar: screenshot] | [TODO Petar: screenshot] |
 
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
